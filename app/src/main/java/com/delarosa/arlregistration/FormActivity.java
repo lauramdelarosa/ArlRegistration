@@ -4,13 +4,16 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import androidx.appcompat.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.delarosa.arlregistration.model.Entitys.DTOArl;
 import com.delarosa.arlregistration.model.database.DataBaseArl;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -18,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
+import androidx.appcompat.app.AppCompatActivity;
 import jxl.Workbook;
 import jxl.WorkbookSettings;
 import jxl.write.Label;
@@ -26,7 +30,10 @@ import jxl.write.WritableWorkbook;
 
 
 public class FormActivity extends AppCompatActivity {
-    EditText name, nit, company, visitor, emergencycall, cellphone, eps, arl;
+    private final static String[] names = {"Tekus", "Sara", "Laura", "Pablo", "Luis",
+            "Carlos", "Wilder", "Jesica", "Lorena", "Sebastian", "William", "Kevin", "Roger", "Victoria", "Jaime", "Diego Pino", "Leonardo"};
+    EditText name, nit, company, emergencyCall, cellphone, eps, arl;
+    Spinner visitor;
     DataBaseArl dataBaseArl;
 
     @Override
@@ -37,23 +44,26 @@ public class FormActivity extends AppCompatActivity {
         nit = findViewById(R.id.cc);
         company = findViewById(R.id.company);
         visitor = findViewById(R.id.visitor);
-        emergencycall = findViewById(R.id.emergency_call);
+        emergencyCall = findViewById(R.id.emergency_call);
         cellphone = findViewById(R.id.cel);
         eps = findViewById(R.id.eps);
         arl = findViewById(R.id.arl);
+
+        ArrayAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, names);
+        visitor.setAdapter(adapter);
 
         dataBaseArl = new DataBaseArl(this);
 
     }
 
     public void finishButton(View view) {
-        saveRecord();
-        validateDataToSend();
-        startActivity(new Intent(this, FinishActivity.class));
+        if (saveRecord()) startActivity(new Intent(this, FinishActivity.class));
 
     }
 
     private void validateDataToSend() {
+
+
         ArrayList<DTOArl> recordsList = dataBaseArl.getRecords();
         //parametrizable
         if (recordsList.size() > 2) {
@@ -122,7 +132,7 @@ public class FormActivity extends AppCompatActivity {
 
             workbook.write();
             workbook.close();
-            sendExceltoEmail();
+            sendExcelToEmail();
 
 
         } catch (Exception e) {
@@ -130,7 +140,7 @@ public class FormActivity extends AppCompatActivity {
         }
     }
 
-    private void sendExceltoEmail() {
+    private void sendExcelToEmail() {
         new AsyncTask<Object, Void, Void>() {
             @Override
             protected Void doInBackground(Object... params) {
@@ -152,23 +162,64 @@ public class FormActivity extends AppCompatActivity {
     }
 
 
-    private void saveRecord() {
-        DTOArl dtoArl = new DTOArl();
-        dtoArl.setName(name.getText().toString());
-        dtoArl.setNit(nit.getText().toString());
-        dtoArl.setCompany(company.getText().toString());
-        dtoArl.setVisitor(visitor.getText().toString());
-        dtoArl.setEmergencyCall(emergencycall.getText().toString());
-        dtoArl.setCellphone(cellphone.getText().toString());
-        dtoArl.setEps(eps.getText().toString());
-        dtoArl.setArl(arl.getText().toString());
+    private boolean saveRecord() {
+        if (validateNullFields()) {
+            DTOArl dtoArl = new DTOArl();
+            dtoArl.setName(name.getText().toString());
+            dtoArl.setNit(nit.getText().toString());
+            dtoArl.setCompany(company.getText().toString());
+            dtoArl.setVisitor(visitor.getSelectedItem().toString());
+            dtoArl.setEmergencyCall(emergencyCall.getText().toString());
+            dtoArl.setCellphone(cellphone.getText().toString());
+            dtoArl.setEps(eps.getText().toString());
+            dtoArl.setArl(arl.getText().toString());
 
-        SimpleDateFormat date = new SimpleDateFormat("dd-MM-yyyy");
-        SimpleDateFormat time = new SimpleDateFormat("HH:mm:ss");
+            SimpleDateFormat date = new SimpleDateFormat("dd-MM-yyyy");
+            SimpleDateFormat time = new SimpleDateFormat("HH:mm:ss");
 
-        dtoArl.setTime(time.format(new Date()));
-        dtoArl.setDate(date.format(new Date()));
-        dataBaseArl.saveRecord(dtoArl);
+            dtoArl.setTime(time.format(new Date()));
+            dtoArl.setDate(date.format(new Date()));
+            dataBaseArl.saveRecord(dtoArl);
+            return true;
+        }
+        return false;
+    }
+
+    private boolean validateNullFields() {
+        if (TextUtils.isEmpty(name.getText().toString())) {
+            Snackbar.make(findViewById(R.id.FormLayout), getResources().getString(R.string.null_name), Snackbar.LENGTH_SHORT).show();
+            return false;
+        }
+        if (TextUtils.isEmpty(nit.getText().toString())) {
+            Snackbar.make(findViewById(R.id.FormLayout), getResources().getString(R.string.null_nit), Snackbar.LENGTH_SHORT).show();
+            return false;
+        }
+        if (TextUtils.isEmpty(company.getText().toString())) {
+            Snackbar.make(findViewById(R.id.FormLayout), getResources().getString(R.string.null_company), Snackbar.LENGTH_SHORT).show();
+            return false;
+        }
+        if (TextUtils.isEmpty(visitor.getSelectedItem().toString())) {
+            Snackbar.make(findViewById(R.id.FormLayout), getResources().getString(R.string.null_visitor), Snackbar.LENGTH_SHORT).show();
+            return false;
+        }
+        if (TextUtils.isEmpty(emergencyCall.getText().toString())) {
+            Snackbar.make(findViewById(R.id.FormLayout), getResources().getString(R.string.null_emergencyCall), Snackbar.LENGTH_SHORT).show();
+            return false;
+        }
+        if (TextUtils.isEmpty(cellphone.getText().toString())) {
+            Snackbar.make(findViewById(R.id.FormLayout), getResources().getString(R.string.null_cellphone), Snackbar.LENGTH_SHORT).show();
+            return false;
+        }
+        if (TextUtils.isEmpty(eps.getText().toString())) {
+            Snackbar.make(findViewById(R.id.FormLayout), getResources().getString(R.string.null_eps), Snackbar.LENGTH_SHORT).show();
+            return false;
+        }
+        if (TextUtils.isEmpty(arl.getText().toString())) {
+            Snackbar.make(findViewById(R.id.FormLayout), getResources().getString(R.string.null_arl), Snackbar.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
     }
 
 

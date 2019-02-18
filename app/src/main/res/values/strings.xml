@@ -1,4 +1,22 @@
 <resources>
     <string name="app_name">ARLRegistration</string>
     <string name="permission_denied">Permiso denegado</string>
+    <string name="null_name">escribe tu nombre para continuar</string>
+    <string name="null_nit">escribe tu documento de identificación para continuar</string>
+    <string name="null_company">escribe de que empresa vienes para continuar</string>
+    <string name="null_visitor">selecciona a quien visitas para continuar</string>
+    <string name="null_emergencyCall">escribe un contacto de emergencia para continuar</string>
+    <string name="null_cellphone">escribe tu celular para continuar</string>
+    <string name="null_eps">selecciona tu eps para continuar</string>
+    <string name="null_arl">escribe tu arl para continuar</string>
+    <string-array name="spinner_visitor">
+        <item>Perro</item>
+        <item>Gato</item>
+        <item>Caballo</item>
+        <item>Canario</item>
+        <item>Vaca</item>
+        <item>Cerdo</item>
+    </string-array>
 </resources>
+
+
