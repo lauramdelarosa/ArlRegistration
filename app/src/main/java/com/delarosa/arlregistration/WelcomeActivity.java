@@ -1,15 +1,20 @@
 package com.delarosa.arlregistration;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.TextView;
 
 import com.google.android.material.snackbar.Snackbar;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 public class WelcomeActivity extends AppCompatActivity {
     private static final int PERMISSION_REQUEST_CODE = 1;
@@ -67,6 +72,38 @@ public class WelcomeActivity extends AppCompatActivity {
                 }
                 break;
         }
+    }
+
+    public void config(View _view) {
+        final TextView passwordTextView;
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.fragment_dialog_password, null);
+
+        passwordTextView = view.findViewById(R.id.dialog_edittext_password);
+        builder.setView(view)
+                .setTitle("Ingresa a Configuraciones")
+                .setCancelable(false)
+                .setPositiveButton("Desbloquear", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        // sign in the user ...
+                        String password = passwordTextView.getText().toString().trim();
+
+                        if (password.equals("987654")) {
+                            startActivity(new Intent(WelcomeActivity.this, SettingsActivity.class));
+                        }
+                    }
+                })
+                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
+                });
+
+        final AlertDialog alert = builder.create();
+        alert.show();
+
     }
 
 
