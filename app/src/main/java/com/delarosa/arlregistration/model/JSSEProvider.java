@@ -1,4 +1,4 @@
-package com.delarosa.arlregistration;
+package com.delarosa.arlregistration.model;
 
 import java.security.AccessController;
 import java.security.Provider;

@@ -1,4 +1,4 @@
-package com.delarosa.arlregistration;
+package com.delarosa.arlregistration.model;
 
 
 import android.os.Environment;

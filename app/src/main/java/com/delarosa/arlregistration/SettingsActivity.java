@@ -5,8 +5,10 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 
 import com.delarosa.arlregistration.model.Entitys.DTOArl;
+import com.delarosa.arlregistration.model.GMailSender;
 import com.delarosa.arlregistration.model.database.DataBaseArl;
 
 import java.io.File;
@@ -22,18 +24,21 @@ import jxl.write.WritableWorkbook;
 
 public class SettingsActivity extends AppCompatActivity {
     DataBaseArl dataBaseArl;
+    Button EnviarExcelButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-
+        EnviarExcelButton = findViewById(R.id.EnviarExcelButton);
         dataBaseArl = new DataBaseArl(this);
+        EnviarExcelButton.setEnabled(true);
     }
 
     public void enviarExcel(View view) {
         ArrayList<DTOArl> recordsList = dataBaseArl.getRecords();
         buildExcel(recordsList);
+        EnviarExcelButton.setEnabled(false);
     }
 
     private void buildExcel(ArrayList<DTOArl> recordsList) {
