@@ -19,8 +19,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 
 public class FormActivity extends AppCompatActivity {
-    private final static String[] names = {"Tekus", "Sara", "Laura", "Pablo", "Luis",
-            "Carlos", "Wilder", "Jesica", "Lorena", "Sebastian", "William", "Kevin", "Roger", "Victoria", "Jaime", "Diego Pino", "Leonardo"};
+    private final static String[] names = {
+            "Tekus", "Sara", "Laura", "Pablo", "Luis", "Carlos", "Wilder", "Jesica", "Lorena", "Sebastian", "William", "Kevin", "Roger", "Victoria", "Jaime", "Diego Pino", "Leonardo"};
     EditText name, nit, company, emergencyCall, cellphone, eps, arl;
     Spinner visitor;
     DataBaseArl dataBaseArl;
@@ -75,39 +75,50 @@ public class FormActivity extends AppCompatActivity {
 
     private boolean validateNullFields() {
         if (TextUtils.isEmpty(name.getText().toString())) {
-            Snackbar.make(findViewById(R.id.FormLayout), getResources().getString(R.string.null_name), Snackbar.LENGTH_SHORT).show();
+            showMessage(getResources().getString(R.string.null_name));
             return false;
         }
         if (TextUtils.isEmpty(nit.getText().toString())) {
-            Snackbar.make(findViewById(R.id.FormLayout), getResources().getString(R.string.null_nit), Snackbar.LENGTH_SHORT).show();
+            showMessage(getResources().getString(R.string.null_nit));
             return false;
         }
         if (TextUtils.isEmpty(company.getText().toString())) {
-            Snackbar.make(findViewById(R.id.FormLayout), getResources().getString(R.string.null_company), Snackbar.LENGTH_SHORT).show();
+            showMessage(getResources().getString(R.string.null_company));
             return false;
         }
         if (TextUtils.isEmpty(visitor.getSelectedItem().toString())) {
-            Snackbar.make(findViewById(R.id.FormLayout), getResources().getString(R.string.null_visitor), Snackbar.LENGTH_SHORT).show();
+            showMessage(getResources().getString(R.string.null_visitor));
             return false;
         }
         if (TextUtils.isEmpty(emergencyCall.getText().toString())) {
-            Snackbar.make(findViewById(R.id.FormLayout), getResources().getString(R.string.null_emergencyCall), Snackbar.LENGTH_SHORT).show();
+            showMessage(getResources().getString(R.string.null_emergencyCall));
             return false;
         }
         if (TextUtils.isEmpty(cellphone.getText().toString())) {
-            Snackbar.make(findViewById(R.id.FormLayout), getResources().getString(R.string.null_cellphone), Snackbar.LENGTH_SHORT).show();
+            showMessage(getResources().getString(R.string.null_cellphone));
             return false;
         }
         if (TextUtils.isEmpty(eps.getText().toString())) {
-            Snackbar.make(findViewById(R.id.FormLayout), getResources().getString(R.string.null_eps), Snackbar.LENGTH_SHORT).show();
+            showMessage(getResources().getString(R.string.null_eps));
             return false;
         }
         if (TextUtils.isEmpty(arl.getText().toString())) {
-            Snackbar.make(findViewById(R.id.FormLayout), getResources().getString(R.string.null_arl), Snackbar.LENGTH_SHORT).show();
+            showMessage(getResources().getString(R.string.null_arl));
             return false;
         }
 
         return true;
+    }
+
+    /**
+     * muestra el mensaje de error por ser alguno de los campos vacios
+     * @param string
+     */
+    private void showMessage(String string) {
+        Snackbar snackbar = Snackbar.make(findViewById(R.id.FormLayout), string, Snackbar.LENGTH_SHORT);
+        View snackbarView = snackbar.getView();
+        snackbarView.setBackgroundColor(getResources().getColor(R.color.google));
+        snackbar.show();
     }
 
 

@@ -18,6 +18,7 @@ import androidx.core.content.ContextCompat;
 
 public class WelcomeActivity extends AppCompatActivity {
     private static final int PERMISSION_REQUEST_CODE = 1;
+    private static final int PERMISSION_REQUEST_CODE_CAMERA = 2;
 
     private boolean enableButton = false;
 
@@ -47,16 +48,16 @@ public class WelcomeActivity extends AppCompatActivity {
 
     public boolean checkPermission() {
         int result = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        if (result == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        } else {
-            return false;
-        }
+        int resultCamera = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
+
+        return (result == PackageManager.PERMISSION_GRANTED && resultCamera == PackageManager.PERMISSION_GRANTED);
+
     }
 
     //permission to save the file in the device
     private void requestPermission() {
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST_CODE_CAMERA);
     }
 
     //result of the answer of the user
@@ -64,6 +65,14 @@ public class WelcomeActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
             case PERMISSION_REQUEST_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    enableButton = true;
+                } else {
+                    Snackbar.make(findViewById(R.id.MainLayout), getResources().getString(R.string.permission_denied), Snackbar.LENGTH_LONG).show();
+                    enableButton = false;
+                }
+                break;
+            case PERMISSION_REQUEST_CODE_CAMERA:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     enableButton = true;
                 } else {
