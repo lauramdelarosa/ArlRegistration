@@ -9,14 +9,7 @@
     <string name="null_cellphone">escribe tu celular para continuar</string>
     <string name="null_eps">selecciona tu eps para continuar</string>
     <string name="null_arl">escribe tu arl para continuar</string>
-    <string-array name="spinner_visitor">
-        <item>Perro</item>
-        <item>Gato</item>
-        <item>Caballo</item>
-        <item>Canario</item>
-        <item>Vaca</item>
-        <item>Cerdo</item>
-    </string-array>
+
 </resources>
 
 
