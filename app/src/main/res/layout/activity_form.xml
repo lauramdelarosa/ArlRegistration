@@ -153,7 +153,27 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="0.90"
-                android:orientation="vertical">
+                android:gravity="end"
+                android:orientation="horizontal">
+                <androidx.cardview.widget.CardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:padding="20dp"
+                    card_view:cardBackgroundColor="@color/white"
+                    card_view:cardCornerRadius="4dp"
+                    card_view:cardElevation="4dp">
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:onClick="takePhoto"
+                        android:text="Tomar Foto"
+                        android:textColor="@color/black" />
+                </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/card_layoutButton"

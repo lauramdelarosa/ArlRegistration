@@ -24,7 +24,7 @@
                 android:id="@+id/imageView"
                 android:layout_marginLeft="20dp"
                 android:layout_width="30dp"
-                android:onClick="config"
+                android:onClick="configButton"
                 android:layout_height="30dp"
                 card_view:srcCompat="@drawable/icon_settings" />
         </LinearLayout>

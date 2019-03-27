@@ -1,17 +1,24 @@
 package com.delarosa.arlregistration;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.StrictMode;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 
 import com.delarosa.arlregistration.model.Entitys.DTOArl;
 import com.delarosa.arlregistration.model.database.DataBaseArl;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -20,10 +27,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class FormActivity extends AppCompatActivity {
     private final static String[] names = {
-            "Tekus", "Sara", "Laura", "Pablo", "Luis", "Carlos", "Wilder", "Jesica", "Lorena", "Sebastian", "William", "Kevin", "Roger", "Victoria", "Jaime", "Diego Pino", "Leonardo"};
+            "Tekus", "Sara", "Laura", "Pablo", "Luis", "Carlos", "Wilder", "Jesica", "Lorena", "Sebastian", "William", "Kevin", "Roger", "Jaime", "Diego Pino", "Leonardo"};
     EditText name, nit, company, emergencyCall, cellphone, eps, arl;
     Spinner visitor;
     DataBaseArl dataBaseArl;
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+    String mCurrentPhotoPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +121,7 @@ public class FormActivity extends AppCompatActivity {
 
     /**
      * muestra el mensaje de error por ser alguno de los campos vacios
+     *
      * @param string
      */
     private void showMessage(String string) {
@@ -121,5 +131,50 @@ public class FormActivity extends AppCompatActivity {
         snackbar.show();
     }
 
+
+    private File createImageFile() throws IOException {
+        File storageDir = Environment.getExternalStorageDirectory();
+        File image = File.createTempFile("example", ".jpg", storageDir);
+        mCurrentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            galleryAddPic();
+        }
+    }
+
+    public void takePhoto(View view) {
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
+        dispatchTakePictureIntent();
+    }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            if (photoFile != null) {
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            }
+        }
+    }
+
+    private void galleryAddPic() {
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        File f = new File(mCurrentPhotoPath);
+        Uri contentUri = Uri.fromFile(f);
+        mediaScanIntent.setData(contentUri);
+        this.sendBroadcast(mediaScanIntent);
+    }
 
 }
