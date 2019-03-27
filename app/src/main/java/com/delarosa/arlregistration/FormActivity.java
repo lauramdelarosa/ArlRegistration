@@ -10,7 +10,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Spinner;
 
 import com.delarosa.arlregistration.model.Entitys.DTOArl;
@@ -133,10 +132,11 @@ public class FormActivity extends AppCompatActivity {
 
 
     private File createImageFile() throws IOException {
-        File storageDir = Environment.getExternalStorageDirectory();
-        File image = File.createTempFile("example", ".jpg", storageDir);
-        mCurrentPhotoPath = image.getAbsolutePath();
-        return image;
+        String fileName = String.valueOf(System.currentTimeMillis()) + ".jpg";
+        String baseDir = Environment.getExternalStorageDirectory().getAbsolutePath();
+        String pathDir = baseDir + "/ARLFOTOS/";
+        mCurrentPhotoPath = pathDir + File.separator + fileName;
+        return new File(mCurrentPhotoPath);
     }
 
     @Override
